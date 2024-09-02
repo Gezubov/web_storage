@@ -1,5 +1,24 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=GoLand
+POST http://localhost:8080/files
+Content-Type: application/json
+
+{
+  "name": "example.txt",
+  "size": {{$random.integer()}},
+  "link": "http://127.0.0.1/files/1"
+}
+
+### GET request with a header
+GET http://localhost:8080/files/5
+Accept: application/json
+
+### GET all files
+GET http://localhost:8080/files
+Accept: application/json
+
+### DELETE file by Id
+DELETE http://localhost:8080/files/12
+Accept: application/json
+
 
 ###
+GET http://localhost:8080/files/40
