@@ -5,17 +5,18 @@ import (
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"log"
-	"os"
+	"web_storage/internal/config"
 )
 
 var MinioClient *minio.Client
 
-func InitMinio() {
-	endPoint := os.Getenv("MINIO_ENDPOINT")
-	accessKeyID := os.Getenv("MINIO_ACCESS_KEY")
-	secretAccessKey := os.Getenv("MINIO_SECRET_KEY")
-	bucketName := os.Getenv("MINIO_BUCKET_NAME")
-	location := os.Getenv("MINIO_LOACTION")
+func InitMinio(configMinio *config.ConfigMinio) {
+
+	endPoint := configMinio.Endpoint
+	accessKeyID := configMinio.AccessKey
+	secretAccessKey := configMinio.SecretKey
+	bucketName := configMinio.Bucket
+	location := configMinio.Location
 
 	minioClient, err := minio.New(endPoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),

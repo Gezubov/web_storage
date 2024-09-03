@@ -5,6 +5,7 @@ import (
 	"github.com/minio/minio-go/v7"
 	"io"
 	"log"
+	"web_storage/internal/config"
 	"web_storage/internal/infrastructure/storage"
 )
 
@@ -13,10 +14,10 @@ type MinioRepository struct {
 	bucketName string
 }
 
-func NewMinioRepository(bucketName string) *MinioRepository {
+func NewMinioRepository(cfgMinio *config.ConfigMinio) *MinioRepository {
 	return &MinioRepository{
 		client:     storage.MinioClient,
-		bucketName: bucketName,
+		bucketName: cfgMinio.Bucket,
 	}
 }
 

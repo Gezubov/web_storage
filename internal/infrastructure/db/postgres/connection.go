@@ -5,16 +5,18 @@ import (
 	"fmt"
 	_ "github.com/lib/pq"
 	"log"
-	"os"
+	"web_storage/internal/config"
 )
 
-func Connect() (*sql.DB, error) {
+func Connect(cfg *config.Config) (*sql.DB, error) {
+
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable host=%s port=%s",
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_DB"),
-		os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_PORT"))
+		cfg.DB.User,
+		cfg.DB.Password,
+		cfg.DB.DBName,
+		cfg.DB.Host,
+		cfg.DB.Port,
+	)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return nil, err
