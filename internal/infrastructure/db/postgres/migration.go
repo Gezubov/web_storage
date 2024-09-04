@@ -2,7 +2,6 @@ package postgres
 
 import (
 	"database/sql"
-	"log"
 )
 
 func Migrate(db *sql.DB) error {
@@ -18,7 +17,6 @@ func Migrate(db *sql.DB) error {
 	if err != nil {
 		return err
 	}
-
-	log.Println("Migration completed successfully")
+	
 	return nil
 }

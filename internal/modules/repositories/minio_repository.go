@@ -4,9 +4,10 @@ import (
 	"context"
 	"github.com/minio/minio-go/v7"
 	"io"
-	"log"
+	"log/slog"
 	"web_storage/internal/config"
 	"web_storage/internal/infrastructure/storage"
+	"web_storage/pkg/logger"
 )
 
 type MinioRepository struct {
@@ -31,26 +32,48 @@ func (repo *MinioRepository) UploadFileMinio(objectName string, fileData *minio.
 		*fileData,
 	)
 	if err != nil {
-		log.Printf("Failed to upload file to MinIO: %v", err)
+		logger.Logger.Error("Failed to upload file to MinIO",
+			slog.String("bucket", repo.bucketName),
+			slog.String("object", objectName),
+			slog.String("error", err.Error()))
 		return err
 	}
+
+	logger.Logger.Info("File uploaded to MinIO successfully",
+		slog.String("bucket", repo.bucketName),
+		slog.String("object", objectName))
+
 	return nil
 }
 
 func (repo *MinioRepository) DownloadFileMinio(objectName string) (*minio.Object, error) {
 	object, err := repo.client.GetObject(context.Background(), repo.bucketName, objectName, minio.GetObjectOptions{})
 	if err != nil {
-		log.Printf("Failed to download file from MinIO: %v", err)
+		logger.Logger.Error("Failed to download file from MinIO",
+			slog.String("bucket", repo.bucketName),
+			slog.String("object", objectName),
+			slog.String("error", err.Error()))
 		return nil, err
 	}
+
+	logger.Logger.Info("File downloaded from MinIO successfully",
+		slog.String("bucket", repo.bucketName),
+		slog.String("object", objectName))
+
 	return object, nil
 }
 
 func (repo *MinioRepository) DeleteFileMinio(objectName string) error {
 	err := repo.client.RemoveObject(context.Background(), repo.bucketName, objectName, minio.RemoveObjectOptions{})
 	if err != nil {
-		log.Printf("Failed to delete file from MinIO: %v", err)
+		logger.Logger.Error("Failed to delete file from MinIO",
+			slog.String("bucket", repo.bucketName),
+			slog.String("object", objectName),
+			slog.String("error", err.Error()))
 		return err
 	}
+	logger.Logger.Info("File deleted from MinIO successfully",
+		slog.String("bucket", repo.bucketName),
+		slog.String("object", objectName))
 	return nil
 }

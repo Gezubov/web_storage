@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
-	"log"
+	"log/slog"
 	"web_storage/internal/config"
+	"web_storage/pkg/logger"
 )
 
 func Connect(cfg *config.Config) (*sql.DB, error) {
@@ -19,18 +20,22 @@ func Connect(cfg *config.Config) (*sql.DB, error) {
 	)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
+		logger.Logger.Error("Failed to open database connection", slog.String("error", err.Error()))
 		return nil, err
 	}
 
 	if err := db.Ping(); err != nil {
+		logger.Logger.Error("Failed to ping database", slog.String("error", err.Error()))
 		return nil, err
 	}
 
-	log.Println("Connected to PostgreSQL database successfully")
+	logger.Logger.Info("Connected to PostgreSQL database successfully")
 
 	if err := Migrate(db); err != nil {
-		log.Fatal(err)
+		logger.Logger.Error("Database migration failed", slog.String("error", err.Error()))
+		return nil, err
 	}
-	log.Println("Migrated  successfully")
+
+	logger.Logger.Info("Database migration completed successfully")
 	return db, nil
 }
