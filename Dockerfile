@@ -13,8 +13,8 @@ COPY . .
 # Устанавливаем зависимости
 RUN go mod tidy
 
-# Устанавливаем переменную среды CGO_ENABLED в 1
-ENV CGO_ENABLED=1
+# Устанавливаем переменную среды CGO_ENABLED в 0
+ENV CGO_ENABLED=0
 
 # Собираем приложение с поддержкой CGo
 RUN go build -o main ./cmd/app
