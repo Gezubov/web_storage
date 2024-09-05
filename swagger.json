@@ -1,0 +1,247 @@
+{
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Этот API предоставляет функциональность для загрузки и скачивания файлов.",
+    "title": "Описание приложения",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/files": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Получение всех загруженных файлов.",
+        "operationId": "getAllFilesRequest",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/getAllFilesResponse"
+          },
+          "500": {
+            "$ref": "#/responses/internalServerErrorResponse"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Загрузка файла.",
+        "operationId": "uploadFileRequest",
+        "parameters": [
+          {
+            "$ref": "#/definitions/FileHeader",
+            "x-go-name": "File",
+            "name": "file",
+            "in": "formData"
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/responses/uploadFileResponse"
+          },
+          "400": {
+            "$ref": "#/responses/badRequestResponse"
+          },
+          "500": {
+            "$ref": "#/responses/internalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/files/{id}": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Скачивание файла по ID.",
+        "operationId": "downloadFileRequest",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/downloadFileResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          },
+          "500": {
+            "$ref": "#/responses/internalServerErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Удаление файла по ID.",
+        "operationId": "deleteFileRequest",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/deleteFileResponse"
+          },
+          "404": {
+            "$ref": "#/responses/notFoundResponse"
+          },
+          "500": {
+            "$ref": "#/responses/internalServerErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "FileHeader": {
+      "type": "object",
+      "title": "A FileHeader describes a file part of a multipart request.",
+      "properties": {
+        "Filename": {
+          "type": "string"
+        },
+        "Header": {
+          "$ref": "#/definitions/MIMEHeader"
+        },
+        "Size": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "mime/multipart"
+    },
+    "FileMeta": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Id"
+        },
+        "link": {
+          "type": "string",
+          "x-go-name": "Link"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Size"
+        }
+      },
+      "x-go-package": "web_storage/internal/models"
+    },
+    "MIMEHeader": {
+      "description": "A MIMEHeader represents a MIME-style header mapping\nkeys to sets of values.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "x-go-package": "net/textproto"
+    }
+  },
+  "responses": {
+    "badRequestResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "x-go-name": "Error"
+          }
+        }
+      }
+    },
+    "deleteFileResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "x-go-name": "Message"
+          }
+        }
+      }
+    },
+    "downloadFileResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/FileMeta"
+      }
+    },
+    "getAllFilesResponse": {
+      "description": "",
+      "schema": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/FileMeta"
+        }
+      }
+    },
+    "internalServerErrorResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "x-go-name": "Error"
+          }
+        }
+      }
+    },
+    "notFoundResponse": {
+      "description": "",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "x-go-name": "Error"
+          }
+        }
+      }
+    },
+    "uploadFileResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/FileMeta"
+      }
+    }
+  }
+}
