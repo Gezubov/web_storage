@@ -33,6 +33,8 @@ COPY --from=builder /app/main /main
 
 COPY --from=builder /app/.env /.env
 
+COPY ./swagger.json /docs/swagger.json
+
 # Открываем порт 8080
 EXPOSE 8080
 

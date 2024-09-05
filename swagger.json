@@ -41,10 +41,11 @@
         "operationId": "uploadFileRequest",
         "parameters": [
           {
-            "$ref": "#/definitions/FileHeader",
+            "type": "file",
             "x-go-name": "File",
             "name": "file",
-            "in": "formData"
+            "in": "formData",
+            "required": true
           }
         ],
         "responses": {
@@ -120,23 +121,6 @@
     }
   },
   "definitions": {
-    "FileHeader": {
-      "type": "object",
-      "title": "A FileHeader describes a file part of a multipart request.",
-      "properties": {
-        "Filename": {
-          "type": "string"
-        },
-        "Header": {
-          "$ref": "#/definitions/MIMEHeader"
-        },
-        "Size": {
-          "type": "integer",
-          "format": "int64"
-        }
-      },
-      "x-go-package": "mime/multipart"
-    },
     "FileMeta": {
       "type": "object",
       "properties": {
@@ -160,17 +144,6 @@
         }
       },
       "x-go-package": "web_storage/internal/models"
-    },
-    "MIMEHeader": {
-      "description": "A MIMEHeader represents a MIME-style header mapping\nkeys to sets of values.",
-      "type": "object",
-      "additionalProperties": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      },
-      "x-go-package": "net/textproto"
     }
   },
   "responses": {

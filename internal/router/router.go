@@ -18,6 +18,7 @@ func SetupRouter(app *fiber.App, fileController *controllers.FileController) {
 	app.Get("/docs/swagger.json", func(c *fiber.Ctx) error {
 		return c.SendFile("./docs/swagger.json")
 	})
+
 	app.Get(filesID, fileController.DownloadFileHandler)
 	app.Delete(filesID, fileController.DeleteFileHandler)
 	app.Get(files, fileController.GetAllFilesHandler)

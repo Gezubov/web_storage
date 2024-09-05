@@ -17,6 +17,7 @@ type uploadFileRequest struct {
 	// in:formData
 	// description: Файл для загрузки.
 	// required: true
+	// swagger:file
 	File multipart.FileHeader `json:"file"`
 }
 
